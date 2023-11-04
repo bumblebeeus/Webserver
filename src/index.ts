@@ -1,17 +1,19 @@
-/**
- * IMPORTANT:
- * ---------
- * Do not manually edit this file if you'd like to host your server on Colyseus Cloud
- *
- * If you're self-hosting (without Colyseus Cloud), you can manually
- * instantiate a Colyseus Server as documented here:
- *
- * See: https://docs.colyseus.io/server/api/#constructor-options
- */
-import { listen } from "@colyseus/tools";
+import { Server } from "colyseus";
+import { WebSocketTransport } from "@colyseus/ws-transport";
+import { createServer } from "http";
+import express from "express";
+import { GameRoom } from "./rooms/GameRoom";
+const port = Number(process.env.PORT) || 9999;
 
-// Import Colyseus config
-import app from "./app.config";
+const app = express();
+app.use(express.json());
 
-// Create and listen on 2567 (or PORT environment variable.)
-listen(app);
+const gameServer = new Server({
+  transport: new WebSocketTransport({
+    server: createServer(app),
+    pingInterval: 0, //  Debug only
+  }) 
+});
+
+gameServer.define("game", GameRoom);
+gameServer.listen(port);
