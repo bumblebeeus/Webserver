@@ -11,7 +11,7 @@ export class GameRoom extends Room<GameStateSchema> {
       this.state.changePosition(client.sessionId, message);
     });
 
-    this.onMessage("setSkin", (client, message) => {
+    this.onMessage("changeSkin", (client, message) => {
       this.state.changeSkin(client.sessionId, message);
     })
 
