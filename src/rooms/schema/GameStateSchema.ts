@@ -10,6 +10,9 @@ export class PlayerSchema extends Schema {
     @type("boolean")
     isFlip = false;
 
+    @type("int32")
+    skinId = 0;
+
     public constructor(x: number, y: number)
     {
         super();
@@ -25,8 +28,14 @@ export class GameStateSchema extends Schema {
     isStart = false;
     @type("uint32")
     mapId = 0;
+    @type("string")
+    sessionIdWin = "";
 
     something = "This attribute won't be sent to the client-side";
+
+    declareWin(sessionId: string) {
+        this.sessionIdWin = sessionId;
+    }
 
     createPlayer(sessionId: string) {
         this.players.set(sessionId, new PlayerSchema(0, 0));
@@ -45,6 +54,16 @@ export class GameStateSchema extends Schema {
     startGame()
     {
         this.isStart = true;
+    }
+
+    changeMap(message: GameStateSchema)
+    {
+        this.mapId = message.mapId;
+    }
+
+    changeSkin(sessionId: string, newInfo: PlayerSchema)
+    {
+        this.players.get(sessionId).skinId = newInfo.skinId;
     }
 
     changePositionAll(newPos: PlayerSchema)

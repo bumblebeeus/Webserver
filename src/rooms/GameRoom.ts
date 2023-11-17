@@ -11,12 +11,24 @@ export class GameRoom extends Room<GameStateSchema> {
       this.state.changePosition(client.sessionId, message);
     });
 
+    this.onMessage("setSkin", (client, message) => {
+      this.state.changeSkin(client.sessionId, message);
+    })
+
     this.onMessage("start", (client, message) => {
       this.state.startGame();
     });
 
     this.onMessage("initPos", (client, message) => {
       this.state.changePositionAll(message);
+    })
+
+    this.onMessage("changeMap", (client, message) => {
+      this.state.changeMap(message);
+    })
+    
+    this.onMessage("declareWin", (client, message) => {
+      this.state.declareWin(client.sessionId);
     })
   }
 
